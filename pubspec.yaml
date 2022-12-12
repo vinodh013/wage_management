@@ -44,6 +44,8 @@ dependencies:
   firebase_storage: ^11.0.6
   cloud_firestore: ^4.1.0
   intl: ^0.17.0
+  vector_math: ^2.1.2
+  flutter_slidable: ^2.0.0
 
 dev_dependencies:
   flutter_test:

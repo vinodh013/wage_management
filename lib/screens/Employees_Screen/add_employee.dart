@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wage_management/constants.dart';
+import 'package:wage_management/controller/add_employee_controller.dart';
 
 import 'package:wage_management/widgets/TextFormField.dart';
 
 class AddEmployee extends StatefulWidget {
-  const AddEmployee({super.key});
+  AddEmployee({super.key});
 
   @override
   State<AddEmployee> createState() => _AddEmployeeState();
@@ -15,27 +18,86 @@ class _AddEmployeeState extends State<AddEmployee> {
   final TextEditingController rateController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+   Future<Uint8List>? img;
+
   @override
   Widget build(BuildContext context) {
-    
+    // var image = addEmployeeController.pickImage();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
-        elevation: 0,
-      ),
       body: Form(
         key: _formKey,
         child: Column(
           children: [
+            Container(
+              height: 60,
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Text(
+                      'Back',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        addEmployeeController.addEmployees(
+                          3,
+                          nameController.text,
+                          int.parse(rateController.text),
+                        );
+                        nameController.clear();
+                        rateController.clear();
+                      }
+                    },
+                    child: const Text(
+                      'Save',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(
+                  ()  {
+                      img =  addEmployeeController.pickImage();
+                  },
+                );
+              },
+              child: Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                ),
+                child: FutureBuilder(
+                    future: img,
+                    builder: ((context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Image.memory(snapshot.data!);
+                      }
+                      return Container();
+                    })),
+              ),
+            ),
             const SizedBox(
-              height: 20,
+              height: 25,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextInputField(
-                validate: (value ) {
-                 if (value!.isEmpty || !RegExp(r'^[a-z A-Z]').hasMatch(value)) {
+                validate: (value) {
+                  if (value!.isEmpty ||
+                      !RegExp(r'^[a-z A-Z]').hasMatch(value)) {
                     return 'Enter Correct Name';
                   }
                   return null;
@@ -48,6 +110,48 @@ class _AddEmployeeState extends State<AddEmployee> {
             const SizedBox(
               height: 10,
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: TextInputField(
+                      validate: (value) {
+                        if (value!.isEmpty ||
+                            !RegExp(r'^[0-9]').hasMatch(value)) {
+                          return 'Enter Number';
+                        }
+                        return null;
+                      },
+                      controller: rateController,
+                      textInputType: TextInputType.number,
+                      labelText: 'Rate',
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: TextInputField(
+                      validate: (value) {
+                        if (value!.isEmpty ||
+                            !RegExp(r'^[0-9]').hasMatch(value)) {
+                          return 'Enter Number';
+                        }
+                        return null;
+                      },
+                      controller: rateController,
+                      textInputType: TextInputType.number,
+                      labelText: 'Phone Number',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextInputField(
@@ -59,60 +163,9 @@ class _AddEmployeeState extends State<AddEmployee> {
                 },
                 controller: rateController,
                 textInputType: TextInputType.number,
-                labelText: 'Rate',
+                labelText: 'Phone Number',
               ),
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  height: 50,
-                  width: 150,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                    )),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Back'),
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                  width: 150,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                      ),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        addEmployeeController.addEmployees(
-                          3,
-                          nameController.text,
-                          int.parse(rateController.text),
-                        );
-
-                        nameController.clear();
-                        rateController.clear();
-                      }
-                    },
-                    child: const Text('Save'),
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),

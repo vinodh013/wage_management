@@ -45,14 +45,16 @@ class _CounterTileState extends State<CounterTile> {
         margin: const EdgeInsets.symmetric(horizontal: 20),
         height: 50,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(250, 242, 240, 240),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.black, width: 1)),
+        decoration: const BoxDecoration(
+            color: Color.fromARGB(249, 255, 255, 255)          // borderRadius: BorderRadius.circular(10),
+            // border: Border.all(color: Colors.black, width: 1)
+            ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.name),
+            Text(widget.name, style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.w600
+            ),),
             Row(
               children: [
                 Container(

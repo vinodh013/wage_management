@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:wage_management/constants.dart';
-import 'package:wage_management/controller/add_employee_controller.dart';
-import 'package:wage_management/controller/attendence_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,23 +13,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
             onTap: (idx) {
               setState(() {
                 pageIndx = idx;
                 if (idx == 2) {
-                 
-                  Get.delete<AttendenceController>();
+                  // Get.delete<AttendenceController>();
                 } else if (idx == 1) {
-                 
-                Get.delete<AddEmployeeController>();
-                } else if (idx == 0){
-                Get.delete<AddEmployeeController>();
-                  Get.delete<AttendenceController>();
+                  // Get.delete<AddEmployeeController>();
+                } else if (idx == 0) {
+                  // Get.delete<AddEmployeeController>();
+                  //   Get.delete<AttendenceController>();
 
-                   
                 }
               });
             },
@@ -51,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icons.add_circle_outline,
                   size: 32,
                 ),
-                label: "Add",
+                label: "Attendents",
               ),
               BottomNavigationBarItem(
                 icon: Icon(

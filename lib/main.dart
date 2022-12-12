@@ -8,7 +8,7 @@ import 'package:wage_management/screens/Homepage.dart';
 void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
+  );
   runApp(const MyApp());
 }
 
@@ -17,7 +17,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const  GetMaterialApp(
+    return  GetMaterialApp(
+    
+      theme: ThemeData.from(
+        colorScheme: const ColorScheme(
+          brightness: Brightness.light,
+          primary: Color.fromARGB(255, 225, 98, 98),
+          onPrimary: Colors.black,
+          secondary:  Colors.redAccent,
+          onSecondary: Colors.black,
+          error: Colors.red,
+          onError: Colors.black,
+          background: Color.fromARGB(255, 232, 224, 224),
+          onBackground: Colors.black,
+          surface: Colors.white,
+          onSurface: Colors.black,
+        ),
+        textTheme: TextTheme(
+
+        ),
+        useMaterial3: true
+      ),
       debugShowCheckedModeBanner: false,
       title: 'Wage Management',
       home: HomeScreen(),

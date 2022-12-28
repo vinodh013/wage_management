@@ -33,6 +33,17 @@
   <link rel="manifest" href="manifest.json">
 
   <script>
+    async function download() {
+      var pdfAsDataUri = "data:application/pdf;base64, " + pdfData;
+      var link = document.createElement('a');
+      link.download = filename;
+      link.href = pdfAsDataUri;
+      link.type = 'application/pdf';
+      link.click();
+    }
+</script>
+
+  <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>

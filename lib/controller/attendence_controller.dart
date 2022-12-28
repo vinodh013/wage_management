@@ -1,17 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:wage_management/constants.dart';
 import 'package:wage_management/models/employee.dart';
+import 'package:wage_management/pdf/printpdf.dart';
 import '../models/attendens.dart';
 
 class AttendenceController extends GetxController {
-  static AttendenceController instance = Get.find();
-
-  late TotalAttendents listOfAttendence = TotalAttendents(attendents: []);
-
-  updateAttendenc(int index, int hours) {
-    listOfAttendence.attendents.elementAt(index).noOfHours = hours;
-  }
+  static AttendenceController instance = Get.put(AttendenceController());
 
   //? FIREBASE functions
 
@@ -27,57 +24,108 @@ class AttendenceController extends GetxController {
     return em;
   }
 
-  addAttendenceToFirestore(String date, TotalAttendents attendence) async {
-    fireStore.collection('daily attendence').doc(date).set(attendence.toMap());
+  addAttendenceToFirestore(
+      {required String date, required Attendents attendence}) async {
+    
+    if (fireStore.collection('daily attendence').doc(date).id == date) {
+      await fireStore.collection('daily attendence').doc(date).update({
+        "attendece": FieldValue.arrayUnion([attendence.toMap()])
+      });
+    } else {
+      fireStore.collection('daily attendence').doc(date).set({
+        'attendece': [attendence.toMap()]
+      });
+    }
   }
 
-  @override
-  void onClose() {
-    AttendenceController().dispose();
-    super.onClose();
+  deleteAttendence({required String date, required Attendents attendence}) async {
+      await   fireStore.collection('daily attendence').doc(date).update({
+        'attendece': FieldValue.arrayRemove([attendence.toMap()])
+      });
   }
-
-  // Remove attendence
-
-  // update attendence
 
   //? attendence queris
 
   //**get all attendence based on date */
 
-  Future<TotalAttendents> filteredAttendence([String? date]) async {
-    var fetchCollection = fireStore.collection('daily attendence');
+  Future<AllAttendents> getallattendence(String date) async {
+    try {
+      AllAttendents v = await fireStore
+          .collection('daily attendence')
+          .doc(date)
+          .get()
+          .then((value) {
+        return AllAttendents.fromMap(value.data()!);
+      });
 
-    // var jsonsource;
-
-    var jsonsource =
-        await fetchCollection.doc(date).get().then((value) => value.data()!);
-
-    return TotalAttendents.fromMap(jsonsource);
+      return v;
+    } catch (e) {
+      throw e.toString();
+    }
   }
 
-  Set<String> docdate = Set<String>();
+  List<AllAttendents> at = <AllAttendents>[];
 
-  List<String> docId = [];
+  getAttendenceByName(DateTime startDate, DateTime endDate, String name) async {
+    var docs = fireStore.collection('daily attendence');
+    // final PdfGrid grid = PdfGrid();
 
-  Future<List<TotalAttendents>> getallattendence([String? date]) async {
-    //= List<String> docId =  [];
+    List<String> days = [];
 
-    var newcollection = <TotalAttendents>[];
+    for (int i = 0; i <= endDate.difference(startDate).inDays; i++) {
+      var f = startDate.add(Duration(days: i));
 
-    await fireStore.collection('daily attendence').get().then((value) => {
-          value.docs.forEach((element) async {
-            docId.add(date ?? element.id);
-          })
-        });
-    // print(att.toString());
-    //  print(docId);
-
-    for (var element in docId.toSet().toList()) {
-      await fireStore.collection('daily attendence').doc(element).get().then(
-          (value) => newcollection.add(TotalAttendents.fromMap(value.data()!)));
+      days.add(DateFormat('dd-M-yyyy').format(f));
     }
 
-    return newcollection;
+    // for (var element in days) {
+    //   docs.doc(element).get().then(
+    //       (value) {
+    //         if (value.data() == null) {
+    //         } else {
+    //           at.add(AllAttendents.fromMap(value.data()!));
+
+    //         }
+    //       },
+    //     );
+
+    // }
+
+    //  for (var element in at) {
+    //   element.allAttendents.removeWhere(
+    //     (element) => element.project != name,
+    //   );
+    // }
+
+    // for (var element in days) {
+    //   await docs.doc(element).get().then(
+    //     (value) {
+    //       if (value.data() == null) {
+    //       } else {
+    //         at.add(AllAttendents.fromMap(value.data()!));
+
+    //       }
+
+    //     },
+    //   );
+    // }
+
+    await Future.forEach(days, (element) async {
+      var value = await docs.doc(element).get();
+      if (value.data() != null) {
+        at.add(AllAttendents.fromMap(value.data()!));
+      }
+      // print(at);
+    });
+
+    for (var element in at) {
+      element.allAttendents.removeWhere(
+        (element) => element.name != name,
+      );
+    }
+
+    print(at);
+
+   // return at;
   }
 }

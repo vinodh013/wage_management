@@ -2,12 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wage_management/constants.dart';
-import 'package:wage_management/controller/add_employee_controller.dart';
 
-import 'package:wage_management/widgets/TextFormField.dart';
+import 'package:wage_management/widgets/textformfield.dart';
 
 class AddEmployee extends StatefulWidget {
-  AddEmployee({super.key});
+  const AddEmployee({super.key});
 
   @override
   State<AddEmployee> createState() => _AddEmployeeState();
@@ -16,9 +15,12 @@ class AddEmployee extends StatefulWidget {
 class _AddEmployeeState extends State<AddEmployee> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController rateController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-   Future<Uint8List>? img;
+   Future<Uint8List?>? img;
+  String? url;
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +47,25 @@ class _AddEmployeeState extends State<AddEmployee> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      if (img != null) {
+                         url = await addEmployeeController.uploadImage();
+                      }
+
                       if (_formKey.currentState!.validate()) {
                         addEmployeeController.addEmployees(
-                          3,
-                          nameController.text,
-                          int.parse(rateController.text),
-                        );
+                            name: nameController.text,
+                            phoneNummber: int.parse(phoneController.text),
+                            salary: int.parse(rateController.text),
+                            description: descriptionController.text,
+                            profileUrl: url ?? '');
                         nameController.clear();
                         rateController.clear();
+                        phoneController.clear();
+                        descriptionController.clear();
                       }
+
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       'Save',
@@ -68,8 +79,9 @@ class _AddEmployeeState extends State<AddEmployee> {
             GestureDetector(
               onTap: () {
                 setState(
-                  ()  {
-                      img =  addEmployeeController.pickImage();
+                  () {
+                    
+                    img = addEmployeeController.pickImage() ;
                   },
                 );
               },
@@ -94,7 +106,7 @@ class _AddEmployeeState extends State<AddEmployee> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextInputField(
+              child: LabelTextInputField(
                 validate: (value) {
                   if (value!.isEmpty ||
                       !RegExp(r'^[a-z A-Z]').hasMatch(value)) {
@@ -116,7 +128,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: TextInputField(
+                    child: LabelTextInputField(
                       validate: (value) {
                         if (value!.isEmpty ||
                             !RegExp(r'^[0-9]').hasMatch(value)) {
@@ -133,7 +145,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                     width: 10,
                   ),
                   Flexible(
-                    child: TextInputField(
+                    child: LabelTextInputField(
                       validate: (value) {
                         if (value!.isEmpty ||
                             !RegExp(r'^[0-9]').hasMatch(value)) {
@@ -141,7 +153,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                         }
                         return null;
                       },
-                      controller: rateController,
+                      controller: phoneController,
                       textInputType: TextInputType.number,
                       labelText: 'Phone Number',
                     ),
@@ -149,21 +161,32 @@ class _AddEmployeeState extends State<AddEmployee> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 25,
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Align(
+                  heightFactor: 2,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Discription',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
+                  )),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextInputField(
                 validate: (value) {
-                  if (value!.isEmpty || !RegExp(r'^[0-9]').hasMatch(value)) {
-                    return 'Enter Number';
-                  }
-                  return null;
+                  // if (value!.isEmpty || !RegExp(r'^[0-9]').hasMatch(value)) {
+                  //   return 'Enter Number';
+                  // }
+                  // return null;
                 },
-                controller: rateController,
+                minLines: 5,
+                controller: descriptionController,
                 textInputType: TextInputType.number,
-                labelText: 'Phone Number',
+                labelText: 'Description',
               ),
             ),
           ],

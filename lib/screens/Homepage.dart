@@ -18,15 +18,15 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: (idx) {
               setState(() {
                 pageIndx = idx;
-                if (idx == 2) {
-                  // Get.delete<AttendenceController>();
-                } else if (idx == 1) {
-                  // Get.delete<AddEmployeeController>();
-                } else if (idx == 0) {
-                  // Get.delete<AddEmployeeController>();
-                  //   Get.delete<AttendenceController>();
+                // if (idx == 2) {
+                //   // Get.delete<AttendenceController>();
+                // } else if (idx == 1) {
+                //   // Get.delete<AddEmployeeController>();
+                // } else if (idx == 0) {
+                //   // Get.delete<AddEmployeeController>();
+                //   //   Get.delete<AttendenceController>();
 
-                }
+                // }
               });
             },
             type: BottomNavigationBarType.fixed,
@@ -34,10 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.dashboard,
+                  Icons.people,
                   size: 30,
                 ),
-                label: "Dashboard",
+                label: "Employee's",
               ),
               BottomNavigationBarItem(
                 icon: Icon(
@@ -48,10 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.person,
+                  Icons.receipt_long,
                   size: 30,
                 ),
-                label: "Employee's",
+                label: "Project's",
               ),
             ]),
         body: pages[pageIndx]);

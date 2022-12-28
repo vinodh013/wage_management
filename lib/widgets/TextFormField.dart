@@ -1,53 +1,49 @@
 import 'package:flutter/material.dart';
 
-import 'package:wage_management/constants.dart';
-
-class TextInputField extends StatefulWidget {
+class TextInputField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final bool isObscure;
-  final String? Function(String?)  validate ;
-//  final IconData icon;
+  final String? Function(String?) validate;
+  final IconData? icon;
   final TextInputType textInputType;
+  final Color color;
+  int? minLines;
 
-  const TextInputField({
+  void Function()? onTap;
+
+  TextInputField({
     Key? key,
-    required this.validate,
     required this.controller,
     required this.labelText,
     this.isObscure = false,
-    //required this.icon,
+    required this.validate,
+    this.icon,
     required this.textInputType,
+    this.color = const Color.fromARGB(255, 232, 224, 224),
+    this.minLines,
+    this.onTap,
   }) : super(key: key);
 
   @override
-  State<TextInputField> createState() => _TextInputFieldState();
-}
-
-class _TextInputFieldState extends State<TextInputField> {
-  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      
-      controller: widget.controller,
-      validator: widget.validate,
-
-      
-      keyboardType: widget.textInputType,
+      onTap: onTap,
+      maxLines: minLines ?? 1,
+      controller: controller,
+      validator: validate,
+      keyboardType: textInputType,
       decoration: InputDecoration(
-        labelText: widget.labelText,
-        // prefixIcon: Icon(icon),
-        labelStyle: const TextStyle(fontSize: 20),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: const BorderSide(color: borderColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: const BorderSide(color: borderColor),
-        ),
+        border: const OutlineInputBorder(borderSide: BorderSide(width: 3)),
+
+        filled: true,
+        fillColor: color,
+        // labelText: labelText,
+        hintText: labelText,
+
+        labelStyle: const TextStyle(fontSize: 16),
       ),
-      obscureText: widget.isObscure,
+      obscureText: isObscure,
     );
   }
 }
@@ -69,6 +65,54 @@ class CustomSearchField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
+    );
+  }
+}
+
+class LabelTextInputField extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final bool isObscure;
+  final String? Function(String?) validate;
+  final IconData? icon;
+  final TextInputType textInputType;
+  final Color color;
+  int? minLines;
+
+  void Function()? onTap;
+
+  LabelTextInputField({
+    Key? key,
+    required this.controller,
+    required this.labelText,
+    this.isObscure = false,
+    required this.validate,
+    this.icon,
+    required this.textInputType,
+    this.color = const Color.fromARGB(255, 232, 224, 224),
+    this.minLines,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      onTap: onTap,
+      maxLines: minLines ?? 1,
+      controller: controller,
+      validator: validate,
+      keyboardType: textInputType,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(borderSide: BorderSide(width: 3)),
+
+        filled: true,
+        fillColor: color,
+       labelText: labelText,
+       // hintText: labelText,
+
+        labelStyle: const TextStyle(fontSize: 16),
+      ),
+      obscureText: isObscure,
     );
   }
 }

@@ -33,9 +33,7 @@ class MyApp extends StatelessWidget {
           surface: Colors.white,
           onSurface: Colors.black,
         ),
-        textTheme: TextTheme(
-
-        ),
+       
         useMaterial3: true
       ),
       debugShowCheckedModeBanner: false,

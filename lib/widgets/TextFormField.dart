@@ -9,11 +9,13 @@ class TextInputField extends StatelessWidget {
   final TextInputType textInputType;
   final Color color;
   int? minLines;
+  bool authfocus;
 
   void Function()? onTap;
 
   TextInputField({
     Key? key,
+    required this.authfocus,
     required this.controller,
     required this.labelText,
     this.isObscure = false,
@@ -28,7 +30,7 @@ class TextInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      autofocus: true,
+      autofocus: authfocus,
       onTap: onTap,
       maxLines: minLines ?? 1,
       controller: controller,
@@ -108,8 +110,8 @@ class LabelTextInputField extends StatelessWidget {
 
         filled: true,
         fillColor: color,
-       labelText: labelText,
-       // hintText: labelText,
+        labelText: labelText,
+        // hintText: labelText,
 
         labelStyle: const TextStyle(fontSize: 16),
       ),

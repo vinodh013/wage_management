@@ -89,8 +89,8 @@ class ProjectCustomListTile extends StatelessWidget {
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10.r)),
-                        height: 200.h,
-                        width: 200.w,
+                        height: 220.h,
+                        width: 230.w,
                         child: Column(
                           children: [
                             const SizedBox(

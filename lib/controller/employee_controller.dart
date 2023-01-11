@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:wage_management/models/employee.dart' as model;
 import '../constants.dart';
 import '../models/employee.dart';
@@ -12,9 +10,7 @@ import '../models/employee.dart';
 class AddEmployeeController extends GetxController {
   static AddEmployeeController instance = Get.find();
 
- 
-
-  String imagepath = '';
+  String? imagepath;
   Uint8List? pickedImages;
 
   // late File? pickimage;
@@ -30,7 +26,10 @@ class AddEmployeeController extends GetxController {
     if (fileResult != null) {
       Get.snackbar('Profile Picture', "Picture selected");
     }
+
     imagepath = fileResult!.files.first.name;
+
+    print(imagepath);
 
     return pickedImages = fileResult.files.first.bytes;
     // var uploadfile = await pickedImage.readAsBytes();
@@ -40,22 +39,17 @@ class AddEmployeeController extends GetxController {
   }
 
   Future<String> uploadImage() async {
-    Reference ref =
-        firebaseStorage.ref().child('profile').child('' + imagepath);
+    Reference ref = firebaseStorage.ref().child('profile').child(imagepath!);
 
     UploadTask uploadTask = ref.putData(
       pickedImages!,
-      SettableMetadata(contentType: 'image/jpeg'),
+     SettableMetadata(contentType: 'image/jpeg'),
     );
 
     TaskSnapshot snapshot = await uploadTask;
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
   }
-
-  // Future<Uint8List?> getImageFromStorage(image) {
-  //   return firebaseStorage.refFromURL(image).getData();
-  // }
 
   addEmployees(
       {required int phoneNummber,
@@ -102,16 +96,3 @@ class AddEmployeeController extends GetxController {
     });
   }
 }
-
-// UPLOAD to firebase Storage
-
-//  at.forEach(
-//       (element1)  {
-//         element1.allAttendents.forEach((element) {
-//           element1.allAttendents
-//               .removeWhere((element) => element.name == 'jnjnjnjn');
-//           print(at);
-//         });
-//       },
-//     );
-

@@ -7,7 +7,6 @@ import 'package:wage_management/pdf/printpdf.dart';
 import 'package:wage_management/screens/Employees_Screen/add_employee.dart';
 import 'package:get/get.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:wage_management/screens/daily_attendence/all_attendence.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmployeeScreen extends StatefulWidget {
@@ -37,9 +36,9 @@ class _MyWidgetState extends State<EmployeeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:  Size.fromHeight(220.h),
+        preferredSize: Size.fromHeight(220.h),
         child: Padding(
-          padding:  EdgeInsets.only(left: 20.w, right: 20.h),
+          padding: EdgeInsets.only(left: 20.w, right: 20.h),
           child: SingleChildScrollView(
             child: Column(children: [
               const SizedBox(
@@ -80,17 +79,18 @@ class _MyWidgetState extends State<EmployeeScreen> {
                     },
                     child: const Text(
                       'Add Employees',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   )
                 ],
               ),
-               SizedBox(
+              SizedBox(
                 height: 25.h,
               ),
               Container(
-                margin:  EdgeInsets.only(bottom: 20.h),
-                padding:  EdgeInsets.symmetric(
+                margin: EdgeInsets.only(bottom: 20.h),
+                padding: EdgeInsets.symmetric(
                   horizontal: 20.w,
                 ),
                 child: TextFormField(
@@ -98,7 +98,7 @@ class _MyWidgetState extends State<EmployeeScreen> {
                       hintText: 'Search People',
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.r),
-                          borderSide:  BorderSide(width: 2.w))),
+                          borderSide: BorderSide(width: 2.w))),
                 ),
               ),
               Row(
@@ -114,7 +114,7 @@ class _MyWidgetState extends State<EmployeeScreen> {
                   ),
                 ],
               ),
-               SizedBox(
+              SizedBox(
                 height: 20.h,
               ),
               const Divider(),
@@ -136,7 +136,7 @@ class _MyWidgetState extends State<EmployeeScreen> {
                     itemBuilder: ((context, index) {
                       if (snapshot.hasData) {
                         return Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 15.w),
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
                           child: Slidable(
                             //  key: ValueKey(0),
                             key: const ValueKey(0),
@@ -156,7 +156,7 @@ class _MyWidgetState extends State<EmployeeScreen> {
                                   ),
                                 );
                               }),
-                              motion: ScrollMotion(),
+                              motion: const ScrollMotion(),
                               children: [
                                 // A SlidableAction can have an icon and/or a label.
                                 SlidableAction(
@@ -187,9 +187,16 @@ class _MyWidgetState extends State<EmployeeScreen> {
                             ),
                             child: ListTile(
                               leading:
-                                  snapshot.data!.employees[index].profilePic !=
-                                          null
+                                  snapshot.data!.employees[index].profilePic ==
+                                          ""
                                       ? CircleAvatar(
+                                          child: ClipRRect(
+                                              child: Image.asset(
+                                            "assets/images/profilepic_default.png",
+                                            fit: BoxFit.cover,
+                                          )),
+                                        )
+                                      : CircleAvatar(
                                           child: ClipOval(
                                             child: Image.network(
                                               snapshot.data!.employees[index]
@@ -200,42 +207,20 @@ class _MyWidgetState extends State<EmployeeScreen> {
 
                                             // scale: 0.5,
                                           ),
-                                        )
-                                      : CircleAvatar(
-                                          child: ClipRRect(
-                                              child: Image.asset(
-                                            "assets/images/profilepic_default.png",
-                                            fit: BoxFit.cover,
-                                          )),
                                         ),
                               onTap: (() => showDialog(
                                     context: context,
                                     builder: (context) {
                                       return Dialog(
                                         child: Container(
-                                          height: 100.h,
-                                          width: 300.w,
+                                          height: 120.h,
+                                          width: 250.w,
                                           child: Padding(
-                                            padding:  EdgeInsets.all(8.0.w),
+                                            padding: EdgeInsets.all(8.0.w),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceEvenly,
                                               children: [
-                                                MaterialButton(
-                                                  onPressed: () {
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return TotalAttendenceScreen();
-                                                      },
-                                                    ));
-                                                  },
-                                                  child: Container(
-                                                    child: const Center(
-                                                      child: Text('Attendence'),
-                                                    ),
-                                                  ),
-                                                ),
                                                 const Divider(),
                                                 MaterialButton(
                                                   onPressed: () async {
@@ -257,20 +242,14 @@ class _MyWidgetState extends State<EmployeeScreen> {
                                                       );
 
                                                       if (attendenceController
-                                                          .at
-                                                          .contains(
-                                                        AllAttendents(
-                                                          allAttendents: [],
-                                                        ),
-                                                      )) {
+                                                          .at.isEmpty) {
+                                                        Get.snackbar('No data',
+                                                            'selected employee has no data');
+
+                                                    
+                                                      } else if(attendenceController.at.isNotEmpty) {
                                                         await createPDF();
 
-                                                        attendenceController.at
-                                                            .clear();
-                                                        // attendenceController.at
-                                                        //     .clear();
-                                                      } else {
-                                                        await createPDF();
                                                         attendenceController.at
                                                             .clear();
                                                       }

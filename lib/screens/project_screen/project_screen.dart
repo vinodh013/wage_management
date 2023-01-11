@@ -47,8 +47,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10.r)),
-                                height: 200.h,
-                                width: 200.w,
+                                height: 220.h,
+                                width: 220.w,
                                 child: Column(
                                   children: [
                                      SizedBox(

@@ -98,6 +98,10 @@ class AttendenceController extends GetxController {
       );
     }
 
+    at.removeWhere(
+      (element) =>  element == AllAttendents(allAttendents: [])
+    );
+
     print(at);
   }
 }

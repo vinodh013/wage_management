@@ -7,18 +7,17 @@ import 'package:wage_management/constants.dart';
 import 'package:wage_management/widgets/textformfield.dart';
 
 class AddAttendenceBottomSheet extends StatelessWidget {
-  AddAttendenceBottomSheet({
-    super.key,
-    required this.onpress,
-    required this.nameController,
-    required this.dateController,
-    required this.overTimeController,
-    required this.projectsController,
-    required this.timeInController,
-    required this.timeOutController,
-    required this.emplval,
-    required this.prjval
-  });
+  AddAttendenceBottomSheet(
+      {super.key,
+      required this.onpress,
+      required this.nameController,
+      required this.dateController,
+      required this.overTimeController,
+      required this.projectsController,
+      required this.timeInController,
+      required this.timeOutController,
+      required this.emplval,
+      required this.prjval});
 
   void Function() onpress;
   TextEditingController nameController;
@@ -28,11 +27,8 @@ class AddAttendenceBottomSheet extends StatelessWidget {
   TextEditingController timeOutController;
   TextEditingController overTimeController;
 
-
-   List<SearchFieldListItem> emplval ;
-  List<SearchFieldListItem> prjval ;
-
-  
+  List<SearchFieldListItem> emplval;
+  List<SearchFieldListItem> prjval;
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +39,18 @@ class AddAttendenceBottomSheet extends StatelessWidget {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20.r),
                 topRight: Radius.circular(20.r))),
-        padding: const EdgeInsets.symmetric(horizontal: 25),
+        padding: EdgeInsets.only(
+            top: 10,
+            right: 22,
+            left: 22,
+            bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           children: [
             SizedBox(
               height: 30.h,
             ),
             TextInputField(
+                authfocus: true,
                 onTap: () {
                   showDatePicker(
                           context: context,
@@ -120,6 +121,7 @@ class AddAttendenceBottomSheet extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextInputField(
+                      authfocus: true,
                       color: const Color.fromARGB(217, 217, 217, 217),
                       validate: (value) {},
                       onTap: () {
@@ -127,8 +129,7 @@ class AddAttendenceBottomSheet extends StatelessWidget {
                                 context: context, initialTime: TimeOfDay.now())
                             .then((value) {
                           if (value != null) {
-                           timeInController.text =
-                                value.format(context);
+                            timeInController.text = value.format(context);
                           }
                         });
                       },
@@ -141,13 +142,13 @@ class AddAttendenceBottomSheet extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextInputField(
+                      authfocus: true,
                       onTap: () {
                         showTimePicker(
                                 context: context, initialTime: TimeOfDay.now())
                             .then((value) {
                           if (value != null) {
-                            timeOutController.text =
-                                value.format(context);
+                            timeOutController.text = value.format(context);
                           }
                         });
                       },
@@ -167,6 +168,7 @@ class AddAttendenceBottomSheet extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextInputField(
+                      authfocus: true,
                       color: const Color.fromARGB(217, 217, 217, 217),
                       validate: (value) {},
                       controller: overTimeController,

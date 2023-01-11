@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Attendents {
+
   
   String name;
   String date;
@@ -13,7 +14,6 @@ class Attendents {
   String timeOut;
   int overTime;
   Attendents({
-   
     required this.name,
     required this.date,
     required this.project,

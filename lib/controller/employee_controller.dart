@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,9 +12,10 @@ import '../models/employee.dart';
 class AddEmployeeController extends GetxController {
   static AddEmployeeController instance = Get.find();
 
+ 
+
   String imagepath = '';
   Uint8List? pickedImages;
-   
 
   // late File? pickimage;
 
@@ -30,15 +32,16 @@ class AddEmployeeController extends GetxController {
     }
     imagepath = fileResult!.files.first.name;
 
-   return pickedImages = fileResult.files.first.bytes;
+    return pickedImages = fileResult.files.first.bytes;
     // var uploadfile = await pickedImage.readAsBytes();
     // return pickedImages = uploadfile;
 
-   // return fileResult;
+    // return fileResult;
   }
 
   Future<String> uploadImage() async {
-    Reference ref = firebaseStorage.ref().child('product').child('' + imagepath);
+    Reference ref =
+        firebaseStorage.ref().child('profile').child('' + imagepath);
 
     UploadTask uploadTask = ref.putData(
       pickedImages!,
@@ -85,6 +88,12 @@ class AddEmployeeController extends GetxController {
 
     Employees employees = Employees.fromMap(employee);
     return employees;
+  }
+
+  Future<int> employeelength() async {
+    int em = await getEmployees().then((value) => value.employees.length);
+    print(em);
+    return em;
   }
 
   deleteEmployee(Employee employee) async {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wage_management/controller/project_controller.dart';
+import 'package:wage_management/models/project.dart';
 import 'package:wage_management/widgets/custom_list_tile.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({super.key});
@@ -16,103 +17,90 @@ class _ProjectScreenState extends State<ProjectScreen> {
   Widget build(BuildContext context) {
     var getProjectcontroller = Get.put(ProjectController());
     TextEditingController projectController = TextEditingController();
-
-    // GlobalKey<NavigatorState> d = GlobalKey();
-
+    // var mediaheight = MediaQuery.of(context).size.height;
+    // var mediawidth = MediaQuery.of(context).size.width;
+    // print(mediaheight);
+    // print(mediawidth);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
+          padding:  EdgeInsets.symmetric(
+            horizontal: 15.w,
           ),
           child: Column(
             children: [
               Container(
-                height: 80,
+                height: 80.h,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
                       onPressed: () async {
-                        
-                        
                         await showDialog(
-                        
-                        context: context,
-                        builder: (context) {
-                          
-
-                          return Dialog(
-
-                            
-                            // shape: CircleBorder(side: BorderSide( )),
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)),
-                              height: 200,
-                              width: 200,
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text(
-                                    'Add Project',
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              // shape: CircleBorder(side: BorderSide( )),
+                              child: Container(
+                                padding: EdgeInsets.all(10.w),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.r)),
+                                height: 200.h,
+                                width: 200.w,
+                                child: Column(
+                                  children: [
+                                     SizedBox(
+                                      height: 15.h,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 25,
-                                  ),
-                                  TextFormField(
-                                    controller: projectController,
-                                    decoration: const InputDecoration(
-                                      filled: true,
-                                      fillColor:
-                                          Color.fromARGB(255, 251, 241, 241),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(width: 1),
+                                    Text(
+                                      'Add Project',
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    alignment: Alignment.bottomRight,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          getProjectcontroller.addProjects(
-                                              projectController.text);
+                                     SizedBox(
+                                      height: 25.h,
+                                    ),
+                                    TextFormField(
+                                      controller: projectController,
+                                      decoration: const InputDecoration(
+                                        filled: true,
+                                        fillColor:
+                                            Color.fromARGB(255, 251, 241, 241),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(width: 1),
+                                        ),
+                                      ),
+                                    ),
+                                     SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Container(
+                                      alignment: Alignment.bottomRight,
+                                      child: TextButton(
+                                          onPressed: () {
+                                            getProjectcontroller.addProjects(
+                                                projectController.text);
 
-                                          projectController.clear();
+                                            projectController.clear();
 
-                                         
-                                              Navigator.pop(context);
-
-                                              
-                                           
-                                        },
-                                        child: const Text('Save')),
-                                  ),
-                                ],
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('Save')),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
+                            );
+                          },
+                        );
 
-                      setState(() {
-                        
-                      });
+                        setState(() {});
                       },
-
                       child: const Text(
                         'Add Project',
                         style: TextStyle(
@@ -131,11 +119,19 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       itemCount: snapshot.data!.projects.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          padding:  EdgeInsets.symmetric(horizontal: 10.w),
                           child: ProjectCustomListTile(
                             //  context: context,
-                              getProjectController: getProjectcontroller,
-                              projectname: snapshot.data!.projects[index].name),
+                            getProjectController: getProjectcontroller,
+                            projectname: snapshot.data!.projects[index].name,
+                            onpress: () async {
+                              await getProjectcontroller.deleteproject(Project(
+                                  name: snapshot.data!.projects[index].name));
+
+                              setState(() {});
+                              navigator!.pop(context);
+                            },
+                          ),
                         );
                       },
                     );

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:wage_management/constants.dart';
-
 import 'package:wage_management/widgets/textformfield.dart';
 
 class AddEmployee extends StatefulWidget {
@@ -19,8 +19,10 @@ class _AddEmployeeState extends State<AddEmployee> {
   final TextEditingController descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-   Future<Uint8List?>? img;
+  Future<Uint8List?>? img;
   String? url;
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class _AddEmployeeState extends State<AddEmployee> {
         child: Column(
           children: [
             Container(
-              height: 60,
+              height: 100.h,
               padding: const EdgeInsets.all(15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +51,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                   TextButton(
                     onPressed: () async {
                       if (img != null) {
-                         url = await addEmployeeController.uploadImage();
+                        url = await addEmployeeController.uploadImage();
                       }
 
                       if (_formKey.currentState!.validate()) {
@@ -65,7 +67,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                         descriptionController.clear();
                       }
 
-                      Navigator.pop(context);
+                      Navigator.pop(context);                    
                     },
                     child: const Text(
                       'Save',
@@ -80,14 +82,13 @@ class _AddEmployeeState extends State<AddEmployee> {
               onTap: () {
                 setState(
                   () {
-                    
-                    img = addEmployeeController.pickImage() ;
+                    img = addEmployeeController.pickImage();
                   },
                 );
               },
               child: Container(
-                height: 150,
-                width: 150,
+                height: 150.h,
+                width: 150.w,
                 decoration: BoxDecoration(
                   border: Border.all(),
                 ),
@@ -101,11 +102,11 @@ class _AddEmployeeState extends State<AddEmployee> {
                     })),
               ),
             ),
-            const SizedBox(
-              height: 25,
+             SizedBox(
+              height: 25.h,
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding:  EdgeInsets.symmetric(horizontal: 20.w),
               child: LabelTextInputField(
                 validate: (value) {
                   if (value!.isEmpty ||
@@ -119,11 +120,11 @@ class _AddEmployeeState extends State<AddEmployee> {
                 labelText: 'Name',
               ),
             ),
-            const SizedBox(
-              height: 10,
+             SizedBox(
+              height: 10.h,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding:  EdgeInsets.symmetric(horizontal: 20.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -141,8 +142,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                       labelText: 'Rate',
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
+                   SizedBox(
+                    width: 10.w,
                   ),
                   Flexible(
                     child: LabelTextInputField(
@@ -162,7 +163,7 @@ class _AddEmployeeState extends State<AddEmployee> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20),
+              padding:  EdgeInsets.only(left: 20.w),
               child: Align(
                   heightFactor: 2,
                   alignment: Alignment.centerLeft,
@@ -175,7 +176,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                   )),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding:  EdgeInsets.symmetric(horizontal: 20.w),
               child: TextInputField(
                 validate: (value) {
                   // if (value!.isEmpty || !RegExp(r'^[0-9]').hasMatch(value)) {

@@ -28,6 +28,7 @@ class TextInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: true,
       onTap: onTap,
       maxLines: minLines ?? 1,
       controller: controller,

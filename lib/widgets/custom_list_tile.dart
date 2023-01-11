@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:wage_management/controller/project_controller.dart';
-import 'package:wage_management/models/project.dart';
-import 'package:wage_management/screens/project_screen/project_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomListTile extends StatelessWidget {
   String projectname;
@@ -20,18 +18,19 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(20)),
-      padding: const EdgeInsets.all(20),
-      height: 65,
+      padding:
+          EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
+      height: 90.h,
       width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           date == null ? Text('') : Text(date!),
           Text(projectname),
-          IconButton(onPressed: onPressed, icon: const Icon(Icons.delete))
+          IconButton(onPressed: onPressed, icon: const Icon(Icons.delete), padding: EdgeInsets.all(0),)
         ],
       ),
     );
@@ -42,13 +41,16 @@ class ProjectCustomListTile extends StatelessWidget {
   String projectname;
   ProjectController getProjectController;
   //BuildContext context;
+  void Function()? onpress;
 
-  ProjectCustomListTile({
-    Key? key,
-    required this.projectname,
-    required this.getProjectController,
-    // required this.context,
-  }) : super(key: key);
+  ProjectCustomListTile(
+      {Key? key,
+      required this.projectname,
+      required this.getProjectController,
+      required this.onpress
+      // required this.context,
+      })
+      : super(key: key);
 
   TextEditingController controller = TextEditingController();
 
@@ -57,11 +59,12 @@ class ProjectCustomListTile extends StatelessWidget {
     controller.text = projectname;
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 20.h),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(20)),
-      padding: const EdgeInsets.all(20),
-      height: 65,
+          color: Colors.white, borderRadius: BorderRadius.circular(20.r)),
+      padding:
+          EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
+      height: 90.h,
       width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,12 +84,13 @@ class ProjectCustomListTile extends StatelessWidget {
                     return Dialog(
                       // shape: CircleBorder(side: BorderSide( )),
                       child: Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.only(
+                            left: 10.w, right: 10.w, top: 10.h, bottom: 10.h),
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
-                        height: 200,
-                        width: 200,
+                            borderRadius: BorderRadius.circular(10.r)),
+                        height: 200.h,
+                        width: 200.w,
                         child: Column(
                           children: [
                             const SizedBox(
@@ -105,43 +109,34 @@ class ProjectCustomListTile extends StatelessWidget {
                             ),
                             TextFormField(
                               controller: controller,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Color.fromARGB(255, 251, 241, 241),
                                 border: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 1),
+                                  borderSide: BorderSide(width: 1.w),
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
+                            SizedBox(
+                              height: 10.h,
                             ),
                             Row(
                               children: [
                                 Container(
                                   alignment: Alignment.bottomRight,
                                   child: TextButton(
-                                      onPressed: () async {
-                                        await getProjectController
-                                            .deleteproject(
-                                                Project(name: projectname));
-
-                                        controller.clear();
-
-                                        navigator!.pop(context);
-                                      },
+                                      onPressed: onpress,
                                       child: const Text('Delete')),
                                 ),
                                 Container(
                                   alignment: Alignment.bottomRight,
                                   child: TextButton(
+                                     
                                       onPressed: () async {
                                         await getProjectController
                                             .addProjects(controller.text);
 
                                         controller.clear();
-
-                                        navigator!.pop(context);
                                       },
                                       child: const Text('Save')),
                                 )
@@ -154,6 +149,9 @@ class ProjectCustomListTile extends StatelessWidget {
                   },
                 );
               },
+              style:  ButtonStyle(
+                padding:   MaterialStateProperty.all(const EdgeInsets.all(0)) 
+              ),
               child: const Text('Edit'))
         ],
       ),

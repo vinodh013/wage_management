@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:printing/printing.dart';
 import 'package:wage_management/constants.dart';
 import 'package:wage_management/controller/employee_controller.dart';
 import 'package:wage_management/models/attendens.dart';
@@ -10,6 +8,7 @@ import 'package:wage_management/screens/Employees_Screen/add_employee.dart';
 import 'package:get/get.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:wage_management/screens/daily_attendence/all_attendence.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmployeeScreen extends StatefulWidget {
   const EmployeeScreen({super.key});
@@ -20,93 +19,107 @@ class EmployeeScreen extends StatefulWidget {
 
 class _MyWidgetState extends State<EmployeeScreen> {
   var getcontroller = Get.put(AddEmployeeController());
+
   int emp = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getcontroller.employeelength().then((value) {
+      setState(() {
+        emp = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(220),
+        preferredSize:  Size.fromHeight(220.h),
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Column(children: [
-            const SizedBox(
-              height: 25,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Total Employees : ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+          padding:  EdgeInsets.only(left: 20.w, right: 20.h),
+          child: SingleChildScrollView(
+            child: Column(children: [
+              const SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Total Employees : ',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '$emp',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                        Text(
+                          "$emp",
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddEmployee(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Add Employees',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  )
+                ],
+              ),
+               SizedBox(
+                height: 25.h,
+              ),
+              Container(
+                margin:  EdgeInsets.only(bottom: 20.h),
+                padding:  EdgeInsets.symmetric(
+                  horizontal: 20.w,
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddEmployee(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Add Employees',
+                child: TextFormField(
+                  decoration: InputDecoration(
+                      hintText: 'Search People',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                          borderSide:  BorderSide(width: 2.w))),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Name',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
+                  Text(
+                    'Salary',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
               ),
-              child: TextFormField(
-                decoration: InputDecoration(
-                    hintText: 'Search People',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(width: 2))),
+               SizedBox(
+                height: 20.h,
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Name',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  'Salary',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Divider(),
-          ]),
+              const Divider(),
+            ]),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -121,13 +134,12 @@ class _MyWidgetState extends State<EmployeeScreen> {
                     shrinkWrap: true,
                     itemCount: snapshot.data!.employees.length,
                     itemBuilder: ((context, index) {
-                      emp = snapshot.data!.employees.length;
                       if (snapshot.hasData) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          padding:  EdgeInsets.symmetric(horizontal: 15.w),
                           child: Slidable(
                             //  key: ValueKey(0),
-                            key: ValueKey(0),
+                            key: const ValueKey(0),
                             endActionPane: ActionPane(
                               dismissible: DismissiblePane(onDismissed: () {
                                 addEmployeeController.deleteEmployee(
@@ -178,14 +190,12 @@ class _MyWidgetState extends State<EmployeeScreen> {
                                   snapshot.data!.employees[index].profilePic !=
                                           null
                                       ? CircleAvatar(
-                                          child: ClipRRect(
-                                            
-                                            
+                                          child: ClipOval(
                                             child: Image.network(
                                               snapshot.data!.employees[index]
                                                   .profilePic
                                                   .toString(),
-                                              fit: BoxFit.contain,
+                                              fit: BoxFit.cover,
                                             ),
 
                                             // scale: 0.5,
@@ -203,10 +213,10 @@ class _MyWidgetState extends State<EmployeeScreen> {
                                     builder: (context) {
                                       return Dialog(
                                         child: Container(
-                                          height: 100,
-                                          width: 300,
+                                          height: 100.h,
+                                          width: 300.w,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:  EdgeInsets.all(8.0.w),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceEvenly,
@@ -253,14 +263,14 @@ class _MyWidgetState extends State<EmployeeScreen> {
                                                           allAttendents: [],
                                                         ),
                                                       )) {
-                                                        Get.snackbar('No Data',
-                                                            'Selected Employee has no data between these dates');
+                                                        await createPDF();
 
                                                         attendenceController.at
                                                             .clear();
+                                                        // attendenceController.at
+                                                        //     .clear();
                                                       } else {
                                                         await createPDF();
-
                                                         attendenceController.at
                                                             .clear();
                                                       }
@@ -286,7 +296,7 @@ class _MyWidgetState extends State<EmployeeScreen> {
                           ),
                         );
                       }
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }),
                   );
                 }

@@ -224,13 +224,15 @@ class _MyWidgetState extends State<EmployeeScreen> {
                                                 const Divider(),
                                                 MaterialButton(
                                                   onPressed: () async {
-                                                    showDateRangePicker(
+                                                    await showDateRangePicker(
                                                       currentDate:
                                                           DateTime.now(),
                                                       context: context,
                                                       firstDate: DateTime(2000),
                                                       lastDate: DateTime(2100),
                                                     ).then((value) async {
+                                                      if (value == null) {}
+
                                                       await attendenceController
                                                           .getAttendenceByName(
                                                         value!.start,
@@ -245,15 +247,17 @@ class _MyWidgetState extends State<EmployeeScreen> {
                                                           .at.isEmpty) {
                                                         Get.snackbar('No data',
                                                             'selected employee has no data');
-
-                                                    
-                                                      } else if(attendenceController.at.isNotEmpty) {
+                                                      } else if (attendenceController
+                                                          .at.isNotEmpty) {
                                                         await createPDF();
 
                                                         attendenceController.at
                                                             .clear();
                                                       }
+                                                      
                                                     });
+
+                                                    Navigator.of(context).pop();
                                                   },
                                                   child: const Center(
                                                     child: Text('Report'),
